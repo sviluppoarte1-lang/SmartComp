@@ -197,6 +197,14 @@ void SmartCompAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juc
     double sr = getSampleRate();
     if (sr < 8000) sr = 48000;
 
+    // Demo: 45 minutes of audio per session, then mute. Timer only, no keys.
+    demoSecondsUsed.store(demoSecondsUsed.load() + (double)numSamples / sr);
+    if (demoSecondsUsed.load() >= kDemoLimitSeconds)
+    {
+        buffer.clear();
+        return;
+    }
+
     float inDB = getFloat(apvts, "inputGain", 0.f);
     float outDB = getFloat(apvts, "outputGain", 0.f);
     bool isBypass = getBool(apvts, "bypass");
@@ -340,7 +348,15 @@ juce::String SmartCompAudioProcessor::getLastPresetCategory() const
     return apvts.state.getProperty("lastPresetCategory", "").toString();
 }
 
-// (no licensing in the public build: always unlocked)
+// ---- Demo (timer only, no license keys in the public build) ----
+bool SmartCompAudioProcessor::isDemoExpired() const
+{
+    return demoSecondsUsed.load() >= kDemoLimitSeconds;
+}
+double SmartCompAudioProcessor::getDemoSecondsRemaining() const
+{
+    return juce::jlimit(0.0, kDemoLimitSeconds, kDemoLimitSeconds - demoSecondsUsed.load());
+}
 
 // createEditor() is defined in PluginEditor.cpp (keeps the crash-guard pattern)
 

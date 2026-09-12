@@ -75,7 +75,10 @@ additionally capped), so the output can never clip.
 
 ## License
 
-This repository is fully unlocked — no keys, no demo limits.
+19.99 EUR — this build runs a **45-minute demo per session**, then audio
+mutes until reload. **Buy:** https://www.paypal.com/paypalme/fearescape/19.99 —
+after payment you receive the fully unlocked build. This repository contains
+no license keys.
 
 ---
 
@@ -108,8 +111,8 @@ Source/
  ├─ Presets/CompPresetManager   25 instrument presets + profiles
  ├─ UI/CompDisplay              transfer curve + GR/level meters
  ├─ UI/ModernLookAndFeel        shared Fear Escape styling
- ├─ PluginProcessor             21 params, LEARN/AUTO, song learn/follow
- └─ PluginEditor                knobs, preset/profile browser, song controls
+ ├─ PluginProcessor             21 params, LEARN/AUTO, song learn/follow, demo clock
+ └─ PluginEditor                knobs, preset/profile browser, song controls, demo bar
 ```
 
 Created by Fear Escape — 2026.

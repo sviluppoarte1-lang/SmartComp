@@ -20,7 +20,44 @@ void SmartCompAudioProcessorEditor::KnobCell::resized()
     knob.setBounds(b);
 }
 
-// (no demo-expired overlay in the public build: always unlocked)
+// Demo-expired overlay (buy link only - no key field in the public build)
+struct SmartCompAudioProcessorEditor::ExpiredOverlay : public juce::Component
+{
+    juce::Label msg;
+    juce::TextButton buy { "BUY FULL VERSION - 19.99 EUR" };
+
+    ExpiredOverlay()
+    {
+        msg.setText("Demo expired after 45 minutes of use - audio is muted.\nBuy the full version for unlimited use.",
+                    juce::dontSendNotification);
+        msg.setJustificationType(juce::Justification::centred);
+        msg.setColour(juce::Label::textColourId, juce::Colours::white);
+        msg.setFont(juce::Font(15.f).withStyle(juce::Font::bold));
+        addAndMakeVisible(msg);
+
+        buy.setColour(juce::TextButton::buttonColourId, juce::Colour(0xff2962ff));
+        buy.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
+        addAndMakeVisible(buy);
+    }
+
+    void paint(juce::Graphics& g) override
+    {
+        g.fillAll(juce::Colour(0xe80a0a0f));
+    }
+
+    void resized() override
+    {
+        auto b = getLocalBounds();
+        b.removeFromTop(juce::jmax(20, getHeight() / 3));
+        msg.setBounds(b.removeFromTop(80));
+        b.removeFromTop(10);
+        auto btnRow = b.removeFromTop(40);
+        buy.setBounds(btnRow.withSizeKeepingCentre(300, 36));
+    }
+};
+
+// Public shop link (payment address, not a secret)
+static constexpr const char* kShopUrl = "https://www.paypal.com/paypalme/fearescape/19.99";
 
 static const char* kKnobNames[13] = {
     "Threshold", "Ratio", "Attack", "Release", "Knee", "Makeup",
@@ -195,13 +232,27 @@ SmartCompAudioProcessorEditor::SmartCompAudioProcessorEditor(SmartCompAudioProce
     statusLabel.setText("Pick a preset or press LEARN while audio plays.", juce::dontSendNotification);
     addAndMakeVisible(statusLabel);
 
-    // (no license bar in the public build: full version, always unlocked)
+    // Demo bar: countdown + buy link, no key field in the public build
+    demoLabel.setFont(juce::Font(11.f).withStyle(juce::Font::bold));
+    demoLabel.setColour(juce::Label::textColourId, juce::Colour(0xffffcc00));
+    addAndMakeVisible(demoLabel);
+    buyButton.setColour(juce::TextButton::buttonColourId, juce::Colour(0xff2962ff));
+    buyButton.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
+    buyButton.setTooltip("Buy the full version - opens PayPal in your browser");
+    buyButton.onClick = []{ juce::URL(kShopUrl).launchInDefaultBrowser(); };
+    addAndMakeVisible(buyButton);
+
+    expiredOverlay = std::make_unique<ExpiredOverlay>();
+    expiredOverlay->buy.setLookAndFeel(&modernLF);
+    expiredOverlay->buy.onClick = []{ juce::URL(kShopUrl).launchInDefaultBrowser(); };
+    addChildComponent(*expiredOverlay);
 
     // Modern styling for the rest
     for (auto* b : { &categoryBox, &presetBox, &profileBox, &circuitBox })
         b->setLookAndFeel(&modernLF);
     for (juce::Button* b : std::array<juce::Button*, 2> { &learnButton, &bypassButton })
         b->setLookAndFeel(&modernLF);
+    buyButton.setLookAndFeel(&modernLF);
     songLearnButton.setLookAndFeel(&modernLF);
     songFollowButton.setLookAndFeel(&modernLF);
     songClearButton.setLookAndFeel(&modernLF);
@@ -237,6 +288,8 @@ SmartCompAudioProcessorEditor::~SmartCompAudioProcessorEditor()
     for (auto* c : knobCells) c->knob.setLookAndFeel(nullptr);
     for (auto* b : { &categoryBox, &presetBox, &profileBox, &circuitBox }) b->setLookAndFeel(nullptr);
     for (juce::Button* b : std::array<juce::Button*, 2> { &learnButton, &bypassButton }) b->setLookAndFeel(nullptr);
+    buyButton.setLookAndFeel(nullptr);
+    if (expiredOverlay) expiredOverlay->buy.setLookAndFeel(nullptr);
     songLearnButton.setLookAndFeel(nullptr);
     songFollowButton.setLookAndFeel(nullptr);
     songClearButton.setLookAndFeel(nullptr);
@@ -390,7 +443,14 @@ void SmartCompAudioProcessorEditor::resized()
     left.removeFromLeft(4);
     songClearButton.setBounds(left.removeFromLeft(52).removeFromTop(30).withTrimmedTop(6));
 
-    // Bottom: knobs, status, then everything else to curve+meters
+    // Bottom: demo bar, knobs, status, then everything else to curve+meters
+    constexpr int demoH = 32;
+    auto demoBar = b.removeFromBottom(demoH);
+    demoBar.reduce(6, 3);
+    demoLabel.setBounds(demoBar.removeFromLeft(330));
+    demoBar.removeFromLeft(6);
+    buyButton.setBounds(demoBar.removeFromRight(250));
+
     constexpr int knobH = 198;
     auto knobRow = b.removeFromBottom(knobH);
     knobRow.reduce(6, 2);
@@ -438,6 +498,10 @@ void SmartCompAudioProcessorEditor::resized()
     detLabel.setBounds(detArea.removeFromTop(26));
     featLabel.setBounds(detArea);
     meters->setBounds(midRight);
+
+    auto overlayArea = getLocalBounds();
+    overlayArea.removeFromBottom(demoH);
+    expiredOverlay->setBounds(overlayArea);
 }
 
 void SmartCompAudioProcessorEditor::timerCallback()
@@ -477,6 +541,18 @@ void SmartCompAudioProcessorEditor::timerCallback()
             detLabel.setText("Listening...", juce::dontSendNotification);
     }
 
+    // Demo countdown + expiry overlay
+    double rem = processor.getDemoSecondsRemaining();
+    int m = (int)rem / 60, s = (int)rem % 60;
+    juce::String t = "Demo: " + juce::String(m) + ":" + (s < 10 ? "0" : "") + juce::String(s) + " remaining";
+    if (demoLabel.getText() != t) demoLabel.setText(t, juce::dontSendNotification);
+    demoLabel.setColour(juce::Label::textColourId, juce::Colour(0xffffcc00));
+    bool expired = processor.isDemoExpired();
+    if (expiredOverlay)
+    {
+        if (expired && !expiredOverlay->isVisible()) expiredOverlay->setVisible(true);
+        else if (!expired && expiredOverlay->isVisible()) expiredOverlay->setVisible(false);
+    }
     repaint();
 }
 

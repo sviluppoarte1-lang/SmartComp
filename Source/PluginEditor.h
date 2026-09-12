@@ -49,7 +49,12 @@ private:
     juce::Label detLabel, featLabel;
     juce::Label statusLabel;
 
-    // (no license bar in the public build: full version, always unlocked)
+    // Demo bar (public build): countdown + buy link, no key field.
+    // Purchase happens outside the plugin - no secrets here.
+    juce::Label demoLabel;
+    juce::TextButton buyButton { "BUY FULL VERSION - 19.99 EUR" };
+    struct ExpiredOverlay;
+    std::unique_ptr<ExpiredOverlay> expiredOverlay;
 
     // Attachments (knob order must match)
     juce::OwnedArray<juce::AudioProcessorValueTreeState::SliderAttachment> knobAttachments;

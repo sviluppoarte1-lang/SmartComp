@@ -27,5 +27,6 @@ if [ -f "$STANDALONE_SRC" ]; then
 fi
 
 echo ""
-echo "SmartComp full version, fully unlocked."
+echo "SmartComp full version (45-minute demo per session)."
+echo "Buy: https://www.paypal.com/paypalme/fearescape/19.99"
 echo "Riavvia la DAW e rescansiona i plugin VST3."

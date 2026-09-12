@@ -74,10 +74,10 @@ public:
     juce::String getLastPresetName() const;
     juce::String getLastPresetCategory() const;
 
-    // ---- Public build: always unlocked ----
-    bool isLicensed() const { return true; }
-    bool isDemoExpired() const { return false; }
-    double getDemoSecondsRemaining() const { return -1.0; }
+    // ---- Public build: no license keys here - 45-minute demo per session ----
+    static constexpr double kDemoLimitSeconds = 45.0 * 60.0;
+    bool isDemoExpired() const;
+    double getDemoSecondsRemaining() const;
 
 private:
     void syncCompParams(double sr, int numSamples); // APVTS -> comp (threshold overridden by AUTO)
@@ -95,6 +95,8 @@ private:
     double lastPpq = -1.0;
     bool lastPpqValid = false;
     bool songWasPlaying = false;
+
+    std::atomic<double> demoSecondsUsed { 0.0 }; // demo timer only, no secrets
 
     std::atomic<int> detectedClass { (int)AutoLeveler::SourceClass::Unknown };
     std::atomic<float> detectedConf { 0.0f };
