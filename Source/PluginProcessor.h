@@ -4,7 +4,6 @@
 #include "DSP/AutoLeveler.h"
 #include "DSP/SongDynamics.h"
 #include "Presets/CompPresetManager.h"
-// Public build: no licensing - full version, always unlocked.
 
 class SmartCompAudioProcessor : public juce::AudioProcessor
 {
@@ -74,10 +73,10 @@ public:
     juce::String getLastPresetName() const;
     juce::String getLastPresetCategory() const;
 
-    // ---- Public build: no license keys here - 45-minute demo per session ----
-    static constexpr double kDemoLimitSeconds = 45.0 * 60.0;
+    // ---- Demo (45 min per session, then mute) ----
     bool isDemoExpired() const;
     double getDemoSecondsRemaining() const;
+    static constexpr double kDemoLimitSeconds = 45.0 * 60.0;
 
 private:
     void syncCompParams(double sr, int numSamples); // APVTS -> comp (threshold overridden by AUTO)
@@ -96,13 +95,13 @@ private:
     bool lastPpqValid = false;
     bool songWasPlaying = false;
 
-    std::atomic<double> demoSecondsUsed { 0.0 }; // demo timer only, no secrets
-
     std::atomic<int> detectedClass { (int)AutoLeveler::SourceClass::Unknown };
     std::atomic<float> detectedConf { 0.0f };
     std::atomic<float> effectiveThr { -18.0f };
     std::atomic<float> avgGRmeter { 0.0f };
     int detectCounter = 0;
+
+    std::atomic<double> demoSecondsUsed { 0.0 };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SmartCompAudioProcessor)
 };

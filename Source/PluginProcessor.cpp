@@ -7,7 +7,6 @@ SmartCompAudioProcessor::SmartCompAudioProcessor()
         .withOutput("Output", juce::AudioChannelSet::stereo(), true)),
       apvts(*this, nullptr, "Parameters", createParameterLayout())
 {
-    // Public build: always unlocked, no license handling.
 }
 
 SmartCompAudioProcessor::~SmartCompAudioProcessor() {}
@@ -197,7 +196,7 @@ void SmartCompAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juc
     double sr = getSampleRate();
     if (sr < 8000) sr = 48000;
 
-    // Demo: 45 minutes of audio per session, then mute. Timer only, no keys.
+    // Demo clock + expiry mute (45 minutes per session, timer only)
     demoSecondsUsed.store(demoSecondsUsed.load() + (double)numSamples / sr);
     if (demoSecondsUsed.load() >= kDemoLimitSeconds)
     {

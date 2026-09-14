@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=SmartComp
+GenericName=Leveling Compressor
+Comment=Leveling compressor-limiter with automatic dynamics regulation by Fear Escape
+Exec=SmartComp
+Icon=smartcomp
+Categories=AudioVideo;Audio;Music;
+Terminal=false
+StartupNotify=false
+Keywords=compressor;limiter;VST;audiomixing;mastering;

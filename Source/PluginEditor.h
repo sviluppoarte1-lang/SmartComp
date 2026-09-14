@@ -49,8 +49,7 @@ private:
     juce::Label detLabel, featLabel;
     juce::Label statusLabel;
 
-    // Demo bar (public build): countdown + buy link, no key field.
-    // Purchase happens outside the plugin - no secrets here.
+    // Demo bar
     juce::Label demoLabel;
     juce::TextButton buyButton { "BUY FULL VERSION - 19.99 EUR" };
     struct ExpiredOverlay;

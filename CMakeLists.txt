@@ -51,7 +51,6 @@ target_compile_definitions(SmartComp PRIVATE
     JUCE_USE_CURL=0
     JUCE_VST3_CAN_REPLACE_VST2=0
     JUCE_DISPLAY_SPLASH_SCREEN=0
-    # Public build: no licensing, full version always unlocked
 )
 
 target_link_libraries(SmartComp PRIVATE

@@ -1,0 +1,14 @@
+Package: smartcomp
+Version: 1.0.0
+Section: sound
+Priority: optional
+Architecture: amd64
+Maintainer: Fear Escape
+Installed-Size: 8544
+Depends: libc6, libstdc++6, libgcc-s1, libfreetype6, libx11-6, libxext6, libxcomposite1, libxcursor1, libxinerama1, libxrandr2, libfontconfig1, libasound2
+Homepage: https://fearescape.example.com
+Description: Leveling compressor-limiter with automatic dynamics regulation (VST3 + standalone)
+ SmartComp by Fear Escape.
+ .
+ Installs the VST3 plugin to /usr/lib/vst3 and the standalone app to /usr/bin.
+ 45-minute demo per session; buy: https://www.paypal.com/paypalme/fearescape/19.99
