@@ -1,0 +1,11 @@
+Package: compsage
+Version: 1.0.0
+Section: sound
+Priority: optional
+Architecture: amd64
+Maintainer: Fear Escape
+Installed-Size: 8528
+Depends: libc6, libstdc++6, libgcc-s1, libfreetype6, libx11-6, libxext6, libxcomposite1, libxcursor1, libxinerama1, libxrandr2, libfontconfig1, libasound2
+Homepage: https://github.com/sviluppoarte1-lang/SmartComp
+Description: Comp Sage - leveling compressor-limiter (VST3 + standalone)
+ 45-minute demo per session.

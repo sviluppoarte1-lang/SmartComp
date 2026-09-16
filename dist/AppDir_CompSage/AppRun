@@ -1,0 +1,11 @@
+#!/bin/bash
+HERE="$(dirname "$(readlink -f "$0")")"
+[ -n "$PULSE_SERVER" ] || PULSE_SERVER="unix:${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/pulse/native"
+[ -n "$XDG_RUNTIME_DIR" ] || XDG_RUNTIME_DIR="/run/user/$(id -u)"
+[ -n "$PULSE_SINK" ] || PULSE_SINK="auto_null"
+export PULSE_SERVER XDG_RUNTIME_DIR PULSE_SINK
+case "$1" in
+  --install-vst3) mkdir -p "$HOME/.vst3" && cp -r "$HERE/usr/lib/vst3/CompSage.vst3" "$HOME/.vst3/" && echo "Comp Sage VST3 installed to $HOME/.vst3/" ;;
+  --help|-h) echo "Comp Sage (portable)"; echo "  --install-vst3: install VST3 to ~/.vst3" ;;
+  *) exec "$HERE/usr/bin/CompSage" "$@" ;;
+esac

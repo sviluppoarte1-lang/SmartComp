@@ -75,7 +75,7 @@ SmartCompAudioProcessorEditor::SmartCompAudioProcessorEditor(SmartCompAudioProce
     meters = std::make_unique<CompMeterComponent>(processor.getComp());
     addAndMakeVisible(*meters);
 
-    titleLabel.setText("SmartComp  |  Leveling Compressor - Limiter  |  Fear Escape", juce::dontSendNotification);
+    titleLabel.setText("Comp Sage  |  Leveling Compressor - Limiter  |  Fear Escape", juce::dontSendNotification);
     titleLabel.setFont(juce::Font(18.f).withStyle(juce::Font::bold));
     titleLabel.setColour(juce::Label::textColourId, juce::Colours::white);
     titleLabel.setJustificationType(juce::Justification::centred);
@@ -136,7 +136,7 @@ SmartCompAudioProcessorEditor::SmartCompAudioProcessorEditor(SmartCompAudioProce
     songLearnButton.setClickingTogglesState(true);
     songLearnButton.setColour(juce::TextButton::buttonColourId, juce::Colour(0xff2a2a3a));
     songLearnButton.setColour(juce::TextButton::buttonOnColourId, juce::Colour(0xffb71c1c));
-    songLearnButton.setTooltip("SONG LEARN: play the whole song - SmartComp memorizza livello e crest battuta per battuta");
+    songLearnButton.setTooltip("SONG LEARN: play the whole song - Comp Sage memorizza livello e crest battuta per battuta");
     addAndMakeVisible(songLearnButton);
     songFollowButton.setClickingTogglesState(true);
     songFollowButton.setColour(juce::TextButton::buttonColourId, juce::Colour(0xff2a2a3a));

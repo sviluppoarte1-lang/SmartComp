@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(SmartComp VERSION 1.0.0)
+project(CompSage VERSION 1.0.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -16,7 +16,7 @@ FetchContent_MakeAvailable(JUCE)
 
 juce_add_plugin(SmartComp
     COMPANY_NAME "Fear Escape"
-    BUNDLE_ID "com.fearescape.smartcomp"
+    BUNDLE_ID "com.fearescape.compsage"
     IS_SYNTH FALSE
     NEEDS_MIDI_INPUT FALSE
     NEEDS_MIDI_OUTPUT FALSE
@@ -27,7 +27,7 @@ juce_add_plugin(SmartComp
     PLUGIN_CODE SmCp
     FORMATS VST3 Standalone
     PRODUCT_NAME "SmartComp"
-    DISPLAY_NAME "SmartComp Leveling Compressor"
+    DISPLAY_NAME "Comp Sage Leveling Compressor"
     VST3_CATEGORIES "Fx|Dynamics|Mastering"
     DESCRIPTION "Leveling compressor-limiter with automatic dynamics regulation by Fear Escape"
     VERSION "1.0.0"

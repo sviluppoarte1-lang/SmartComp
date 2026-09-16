@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Comp Sage
+GenericName=Leveling Compressor
+Comment=Leveling compressor-limiter by Fear Escape
+Exec=CompSage
+Icon=compsage
+Categories=AudioVideo;Audio;Music;
+Terminal=false
