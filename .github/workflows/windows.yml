@@ -1,0 +1,49 @@
+name: Windows Build + Installer
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*win*"
+      - "v1.0.*"
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure (CMake, Release)
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: List artefacts
+        run: |
+          dir build\SmartComp_artefacts\Release\VST3
+          dir build\SmartComp_artefacts\Release\Standalone
+
+      - name: Install Inno Setup
+        run: choco install innosetup -y --no-progress
+        shell: powershell
+
+      - name: Build installer
+        run: |
+          mkdir dist-win
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\CompSage.iss
+          dir dist-win
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: CompSage-Windows-Setup
+          path: dist-win/*.exe
+
+      - name: Upload portable VST3 + standalone
+        uses: actions/upload-artifact@v4
+        with:
+          name: CompSage-Windows-Portable
+          path: |
+            build/SmartComp_artefacts/Release/VST3/SmartComp.vst3
+            build/SmartComp_artefacts/Release/Standalone/SmartComp.exe
